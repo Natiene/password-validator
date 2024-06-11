@@ -22,9 +22,9 @@ export class LoginComponent implements OnInit {
   isSignedIn = false;
   siteKey = '6Lc6tWclAAAAAFeRdj952i55fLgWgaoDuqST8EBA';
   texts = TEXTS;
-  showAlert: boolean = false; 
-  alertType: string = ''; 
-  alertTitle: string = ''; 
+  showAlert: boolean = false;
+  alertType: string = '';
+  alertTitle: string = '';
   alertMessage: string = '';
 
   constructor(private fb: FormBuilder) {}
@@ -117,21 +117,32 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.showAlert = true;
       this.alertType = 'success';
-      this.alertTitle = this.texts.success
-      this.alertMessage = this.texts.registrationSuccessful
-    } 
+      this.alertTitle = this.texts.success;
+      this.alertMessage = this.texts.registrationSuccessful;
+    }
   }
 
-  clearForm() {
+  closeAlert() {
+    this.showAlert = false;
     this.loginForm.reset();
   }
 
-  @HostListener('document:keydown.escape', ['$event']) 
+  @HostListener('document:keydown.escape', ['$event'])
   handleEscape(event: KeyboardEvent) {
-   
-    if (event.key === "Escape") {
-      this.showAlert = false;
-      this.clearForm(); 
+    if (event.key === 'Escape') {
+      this.closeAlert();
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent) {
+    if (!this.showAlert) {
+      return;
+    }
+    const target = event.target as HTMLElement;
+    const alertElement = document.querySelector('.alert');
+    if (!alertElement || !alertElement.contains(target)) {
+      this.closeAlert();
     }
   }
 }
